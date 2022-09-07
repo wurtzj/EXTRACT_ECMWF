@@ -28,7 +28,7 @@ TARGET_DIRECTORY="/cnrm/ville/NO_SAVE/wurtzj/ECMWF/"
 
 #List of dates to extract
 #Format AAAAMMDD
-LISTE_DATES=["20190723","20190724","20190725","20190726","20190727","20190728","20190729","20190801"]
+LISTE_DATES=["20190724","20190725","20190726","20190727","20190728","20190729","20190801"]
 
 #Using ECMWF_DATES enables to collect all dates
 #It may not be efficient to extract MESO-NH data
@@ -42,11 +42,12 @@ END_TIME="48"
 #output frequency
 STEP="1"
 
+FORECAST_START_TIME = "00"
+
 #possibility to remove last step in case of multiple date ?
 #END_TIME=str(int(END_TIME)-int(STEP)) 
 
 HOURS_ECMWF=START_TIME+"/to/"+END_TIME+"/by/"+STEP
-
 
 
 #Domain
@@ -139,6 +140,9 @@ for DATE in LISTE_DATES :
             "stream": "oper",
             "type": "fc", 
             "area": AREA_ECMWF,
+            "grid":GRID_ECMWF,
+            "time":FORECAST_START_TIME,
+
             },
             TARGET_DIRECTORY+OUTPUT_FILE)
         
@@ -155,9 +159,15 @@ for DATE in LISTE_DATES :
                 "stream": "oper",
                 "type": "fc", 
                 "area": AREA_ECMWF,
+                "grid":GRID_ECMWF,
+                "time":FORECAST_START_TIME,
+
+
                 },
                 TARGET_DIRECTORY+OUTPUT_FILE_SFC)
         
+        #option                 "grid":GRID_ECMWF, non necessaire ?
+
     if TYPE=="analysis":
         server.execute(
             {
@@ -238,12 +248,16 @@ for DATE in LISTE_DATES :
 
         
     if GET_SURFACE:
-       os.system("grib_copy " + TARGET_DIRECTORY+OUTPUT_FILE +" " + TARGET_DIRECTORY+OUTPUT_FILE_SFC + " " + TARGET_DIRECTORY+OUTPUT_FILE+"_tempo")
+       os.system("grib_copy " + TARGET_DIRECTORY+OUTPUT_FILE_SFC +" " + TARGET_DIRECTORY+OUTPUT_FILE + " " + TARGET_DIRECTORY+OUTPUT_FILE+"_tempo")
        os.system("rename.ul " + "grib_tempo" + " grib" + TARGET_DIRECTORY+OUTPUT_FILE+"_tempo") #etape may be unusefull but to be sure file is not corrupted
 
 
     if TYPE=="ensemble":
-        os.system('grib_copy '+ TARGET_DIRECTORY+OUTPUT_FILE +" " + TARGET_DIRECTORY+ "ecmwf."+TYPE+".[dataDate].[dataTime]h.member.[perturbationNumber].offset.[offsetToEndOf4DvarWindow].grib")
+        os.system('grib_copy '+ TARGET_DIRECTORY+OUTPUT_FILE+"_tempo" +" " + TARGET_DIRECTORY+ "ecmwf."+TYPE+".[dataDate].[dataTime]h.member.[perturbationNumber].offset.[offsetToEndOf4DvarWindow].grib")
+    if TYPE=="analysis":
+        os.system('grib_copy '+ TARGET_DIRECTORY+OUTPUT_FILE+"_tempo" +" " + TARGET_DIRECTORY+ "ecmwf."+TYPE+".[dataDate].[dataTime].grib")
+    if TYPE=="forecast":
+        os.system('grib_copy '+ TARGET_DIRECTORY+OUTPUT_FILE+"_tempo" +" " + TARGET_DIRECTORY+ "ecmwf."+TYPE+".[dataDate].[stepRange].grib")
 
 
 
