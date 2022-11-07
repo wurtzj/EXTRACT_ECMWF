@@ -21,14 +21,29 @@ def str_num(i,num_chiffre=2):
     else :
         return str(i)
     
+import pandas
+import datetime
+
+def generate_list_date(YEAR_START,MONTH_START,DAY_START, YEAR_END, MONTH_END, DAY_END):
+     sdate = datetime.date(YEAR_START,MONTH_START,DAY_START)   # start date
+     edate = datetime.date(YEAR_END,MONTH_END,DAY_END)+datetime.timedelta(days=1)   # end date
+     liste_of_dates = pandas.date_range(sdate,edate-datetime.timedelta(days=1)).strftime('%Y%m%d').tolist()#,freq='d')
+     return liste_of_dates
 
 #Directory where files will be available
 #It has to end with a /
-TARGET_DIRECTORY="/cnrm/ville/NO_SAVE/wurtzj/ECMWF/"
+TARGET_DIRECTORY="/home/wurtzj/" ##"/cnrm/ville/NO_SAVE/wurtzj/ECMWF/POUR_DIDIER/"
 
 #List of dates to extract
 #Format AAAAMMDD
-LISTE_DATES=["20190724","20190725","20190726","20190727","20190728","20190729","20190801"]
+
+
+#LISTE_DATES=generate_list_date(2022,7,27,2022,8,15)
+#LISTE_DATES=["20190724","20190725","20190726","20190727","20190728","20190729","20190801"]
+#LISTE_DATES=["20190729","20190801"] #didier
+#LISTE_DATES=["20200105","20200106","20200208","20200209", "20200307", "20200308" ] #Marie
+LISTE_DATES=["20191230"] #Marie
+
 
 #Using ECMWF_DATES enables to collect all dates
 #It may not be efficient to extract MESO-NH data
@@ -38,9 +53,9 @@ LISTE_DATES=["20190724","20190725","20190726","20190727","20190728","20190729","
 #start time
 START_TIME="00"
 #end time
-END_TIME="48"
+END_TIME="18"
 #output frequency
-STEP="1"
+STEP="6"
 
 FORECAST_START_TIME = "00"
 
@@ -50,13 +65,28 @@ FORECAST_START_TIME = "00"
 HOURS_ECMWF=START_TIME+"/to/"+END_TIME+"/by/"+STEP
 
 
-#Domain
-LAT_MIN="40"
-LAT_MAX="52"
-LON_MIN="3"
-LON_MAX="20"
+#Domain #didier
+# =============================================================================
+# LAT_MIN="40"
+# LAT_MAX="52"
+# LON_MIN="3"
+# LON_MAX="20"
+# 
+# =============================================================================
+#Domain #marie
+LAT_MIN="43"
+LAT_MAX="46"
+LON_MIN="-2"
+LON_MAX="1"
 
 
+# =============================================================================
+# LAT_MIN=""
+# LAT_MAX=""
+# LON_MIN=""
+# LON_MAX=""
+# 
+# =============================================================================
 
 #GRID -> may be not usefull as grid is automatically set to archived one
 # may be usefull is simulation have gross resolution
@@ -68,7 +98,7 @@ GRID_ECMWF=GRID+"/"+GRID
 #analysis
 #forecast
 #ensemble -> ensemble analysis
-TYPE = "forecast" 
+TYPE = "analysis" 
 
 #get surface parameters or not
 #Default True
@@ -77,6 +107,9 @@ GET_SURFACE=True #True
 
 AREA_ECMWF=LAT_MAX+"/"+LON_MIN+"/"+LAT_MIN+"/"+LON_MAX
 
+if LAT_MIN=="" or LAT_MAX=="" or LAT_MIN=='' or LAT_MAX=='' :
+    print("Warning ! No domain specified, EUROPE set as default")
+    AREA_ECMWF="EUROPE"
 
 server = ECMWFService("mars", url="https://api.ecmwf.int/v1",key="38b0ba68e57fd8d5c7858006bc3dafde",email="jean.wurtz@meteo.fr")
 
@@ -166,7 +199,7 @@ for DATE in LISTE_DATES :
                 },
                 TARGET_DIRECTORY+OUTPUT_FILE_SFC)
         
-        #option                 "grid":GRID_ECMWF, non necessaire ?
+        #option                 "grid":GRID_ECMWF, necessaire pour avoir une grille reguliere
 
     if TYPE=="analysis":
         server.execute(
@@ -181,6 +214,8 @@ for DATE in LISTE_DATES :
             "stream": "oper",
             "type": "an", 
             "area": AREA_ECMWF,
+            "grid":GRID_ECMWF,
+
             },
             TARGET_DIRECTORY+OUTPUT_FILE)
         
@@ -196,6 +231,8 @@ for DATE in LISTE_DATES :
             "stream": "oper",
             "type": "an", 
             "area": AREA_ECMWF,
+            "grid":GRID_ECMWF,
+
             },
                 TARGET_DIRECTORY+OUTPUT_FILE_SFC)
             
@@ -256,6 +293,7 @@ for DATE in LISTE_DATES :
         os.system('grib_copy '+ TARGET_DIRECTORY+OUTPUT_FILE+"_tempo" +" " + TARGET_DIRECTORY+ "ecmwf."+TYPE+".[dataDate].[dataTime]h.member.[perturbationNumber].offset.[offsetToEndOf4DvarWindow].grib")
     if TYPE=="analysis":
         os.system('grib_copy '+ TARGET_DIRECTORY+OUTPUT_FILE+"_tempo" +" " + TARGET_DIRECTORY+ "ecmwf."+TYPE+".[dataDate].[dataTime].grib")
+        os.system("grib_copy " + TARGET_DIRECTORY+OUTPUT_FILE_SFC +" " + TARGET_DIRECTORY+ "ecmwf."+TYPE+".SFC."+"[dataDate].[dataTime].grib")
     if TYPE=="forecast":
         os.system('grib_copy '+ TARGET_DIRECTORY+OUTPUT_FILE+"_tempo" +" " + TARGET_DIRECTORY+ "ecmwf."+TYPE+".[dataDate].[stepRange].grib")
 
