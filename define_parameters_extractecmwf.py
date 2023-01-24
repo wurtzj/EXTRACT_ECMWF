@@ -105,7 +105,7 @@ if LAT_MIN=="" or LAT_MAX=="" or LAT_MIN=='' or LAT_MAX=='' :
     print("Warning ! No domain specified, EUROPE set as default")
     AREA_ECMWF="EUROPE"
 
-server = ECMWFService("mars", url="https://api.ecmwf.int/v1",key="38b0ba68e57fd8d5c7858006bc3dafde",email="jean.wurtz@meteo.fr")
+server = ECMWFService("mars", url="https://api.ecmwf.int/v1",key=KEY,email=MAIL)
 
 
 if TYPE=="elda":
