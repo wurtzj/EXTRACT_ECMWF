@@ -10,7 +10,8 @@ Created on Mon Nov 14 15:19:43 2022
 from ecmwfapi import ECMWFService
 import os
 import numpy as np
-
+import pandas
+import datetime
 
 def str_num(i,num_chiffre=2):
 
@@ -21,15 +22,19 @@ def str_num(i,num_chiffre=2):
 
     else :
         return str(i)
-    
-import pandas
-import datetime
 
 def generate_list_date(YEAR_START,MONTH_START,DAY_START, YEAR_END, MONTH_END, DAY_END):
      sdate = datetime.date(YEAR_START,MONTH_START,DAY_START)   # start date
      edate = datetime.date(YEAR_END,MONTH_END,DAY_END)+datetime.timedelta(days=1)   # end date
      liste_of_dates = pandas.date_range(sdate,edate-datetime.timedelta(days=1)).strftime('%Y%m%d').tolist()#,freq='d')
      return liste_of_dates
+
+#ECMWF mail and API key
+
+KEY= #to complete !
+MAIL= #to complete !
+
+
 
 #Directory where files will be available
 #It has to end with a /
