@@ -7,14 +7,17 @@ Created on Mon Nov 14 15:05:01 2022
 """
 
 import os
+import time
 import define_parameters_extractecmwf
 #Adding parallelisation
 
 nb_max_parallel = 10
-count_proc=0
-time_to_wait=21600  #in seconds
+count_proc = 0
+time_to_wait = 10800  #in seconds
 
-import time
+
+print("LAUNCHED")
+
 for DATE in define_parameters_extractecmwf.LISTE_DATES:
     print(DATE)
     if count_proc < nb_max_parallel:
@@ -25,3 +28,5 @@ for DATE in define_parameters_extractecmwf.LISTE_DATES:
         #thresholds have to be tuned (nb and time max)
         time.sleep(time_to_wait)
         count_proc=0
+
+

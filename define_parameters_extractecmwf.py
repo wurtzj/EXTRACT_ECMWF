@@ -10,8 +10,8 @@ Created on Mon Nov 14 15:19:43 2022
 from ecmwfapi import ECMWFService
 import os
 import numpy as np
-import pandas
-import datetime
+import json
+
 
 def str_num(i,num_chiffre=2):
 
@@ -22,6 +22,9 @@ def str_num(i,num_chiffre=2):
 
     else :
         return str(i)
+    
+import pandas
+import datetime
 
 def generate_list_date(YEAR_START,MONTH_START,DAY_START, YEAR_END, MONTH_END, DAY_END):
      sdate = datetime.date(YEAR_START,MONTH_START,DAY_START)   # start date
@@ -29,16 +32,40 @@ def generate_list_date(YEAR_START,MONTH_START,DAY_START, YEAR_END, MONTH_END, DA
      liste_of_dates = pandas.date_range(sdate,edate-datetime.timedelta(days=1)).strftime('%Y%m%d').tolist()#,freq='d')
      return liste_of_dates
 
-#ECMWF mail and API key
 
-KEY= #to complete !
-MAIL= #to complete !
+#Adding automatic dates
+def generate_date(date_debut,date_fin):
+    
+    if date_debut==date_fin:
 
+        return [date_debut]
+
+    LISTE_DATES = pandas.date_range(date_debut,date_fin,freq='d')
+    
+    return list(LISTE_DATES.strftime("%Y%m%d"))
+
+
+
+MAIL = #to be completed 
+
+KEY =  #to be completed
+
+
+openfile = open('PARAMS_EXTRACT.json', 'r')
+ 
+json_params = json.load(openfile)
+
+
+openfile.close()
 
 
 #Directory where files will be available
 #It has to end with a /
-TARGET_DIRECTORY="/cnrm/ville/DATA/FORCING_ECMWF/RONAN_PAUGAM/"
+TARGET_DIRECTORY=json_params["TARGET_DIRECTORY"]
+
+
+if TARGET_DIRECTORY[-1] != "/":
+    TARGET_DIRECTORY = TARGET_DIRECTORY + "/"
 
 #adding automatic path creation
 import os
@@ -52,59 +79,87 @@ except:
 
 #List of dates to extract
 #Format AAAAMMDD
-LISTE_DATES=["20140822", "20140823"]
+LISTE_DATES=json_params["LISTE_DATES"]
 
 import pandas
-date_debut="20200204"
-date_fin="20200210"
-def generate_date(date_debut,date_fin):
-    
-    LISTE_DATES = pandas.date_range(date_debut,date_fin,freq='d')
-    
-    return list(LISTE_DATES.strftime("%Y%m%d"))
+date_debut=json_params["date_debut"]
+date_fin=json_params["date_fin"]
 
-#Adding automatic dates
+
+
+#priority to liste of dates
 if LISTE_DATES == [] : 
     LISTE_DATES=generate_date(date_debut,date_fin)
 
 
-#start time
-START_TIME="00"
-#end time
-END_TIME="18"
-#output frequency
-STEP="06"
-
-FORECAST_START_TIME = "00"
-
-HOURS_ECMWF=START_TIME+"/to/"+END_TIME+"/by/"+STEP
-
-#Domain 
-#keep empty to get EUROPE domain
-LAT_MIN="-25"
-LAT_MAX="-23"
-LON_MIN="29"
-LON_MAX="33"
-
-
-#GRID
-#enables to get the correct grid for MNH
-GRID=".1"
-GRID_ECMWF=GRID+"/"+GRID
 
 
 #type of data
 #analysis
 #forecast
 #ensemble -> ensemble analysis
-TYPE = "analysis" 
+TYPE =json_params["TYPE"]
+
+if TYPE=="forecast":
+    TYPE="FC"
+if TYPE=="analysis":
+    TYPE="AN"
+if TYPE=="ensemble":
+    TYPE="EN"
+
+
+
+#start time
+START_TIME=json_params["START_TIME"]
+#end time
+END_TIME=json_params["END_TIME"]
+#output frequency
+STEP=json_params["STEP"]
+
+FORECAST_START_TIME = json_params["FORECAST_START_TIME"]
+
+
+
+
+
+if TYPE=="FC" and END_TIME=="00" and START_TIME=="00":
+	END_TIME="24"
+	print("END_TIME=START_TIME=00 , as type = FC setting END_TIME to 24")
+
+if TYPE=="AN" and END_TIME=="00" and START_TIME=="00":
+	END_TIME="18"
+	print("END_TIME=START_TIME=00 , as type = AN setting END_TIME to 18")
+
+HOURS_ECMWF=START_TIME+"/to/"+END_TIME+"/by/"+STEP
+
+
+#Domain 
+#keep empty to get EUROPE domain
+LAT_MIN=json_params["LAT_MIN"]
+LAT_MAX=json_params["LAT_MAX"]
+LON_MIN=json_params["LON_MIN"]
+LON_MAX=json_params["LON_MAX"]
+AREA_ECMWF=json_params["AREA_ECMWF"]
+
+#GRID
+#enables to get the correct grid for MNH
+GRID=json_params["GRID"]
+GRID_ECMWF=GRID+"/"+GRID
+
+
+
+
 
 #get surface parameters or not
 #Default True
 GET_SURFACE=True
 
+if AREA_ECMWF=="" and LAT_MAX != "":
+    AREA_ECMWF=LAT_MAX+"/"+LON_MIN+"/"+LAT_MIN+"/"+LON_MAX
 
-AREA_ECMWF=LAT_MAX+"/"+LON_MIN+"/"+LAT_MIN+"/"+LON_MAX
+if AREA_ECMWF=='GLOBAL' and LAT_MAX=="":
+    AREA_ECMWF=""
+
 
 if LAT_MIN=="" or LAT_MAX=="" or LAT_MIN=='' or LAT_MAX=='' :
     print("Warning ! No domain specified, EUROPE set as default")
@@ -113,7 +168,7 @@ if LAT_MIN=="" or LAT_MAX=="" or LAT_MIN=='' or LAT_MAX=='' :
 server = ECMWFService("mars", url="https://api.ecmwf.int/v1",key=KEY,email=MAIL)
 
 
-if TYPE=="elda":
+if TYPE=="EN":
     number_of_members=26
     MEMBERS="/".join(np.array(range(0,number_of_members)).astype("str"))
 
@@ -143,7 +198,7 @@ if TYPE=="elda":
   #152 lnsp : logarithm of surface pressure (analysis only (?))
   #134 surface pressure (forecast -> which cases ?)
 
-if TYPE=="forecast":
+if TYPE=="FC":
     PRESSURE="/134"
     PARAM_ATM="130/131/132/133" 
     PARAM_SURF="129/172/139/141/170/183/236/39/40/41/42"+ PRESSURE
@@ -151,8 +206,6 @@ else:
     PRESSURE="/152"
     PARAM_ATM="130/131/132/133" + PRESSURE
     PARAM_SURF="129/172/139/141/170/183/236/39/40/41/42"
-
-
 
 
 

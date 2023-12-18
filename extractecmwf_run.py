@@ -14,10 +14,10 @@ from define_parameters_extractecmwf import *
 
 DATE = sys.argv[1]
 
-OUTPUT_FILE="ecmwf."+TYPE+"."+DATE+".grib" 
-OUTPUT_FILE_SFC="ecmwf."+TYPE+".SFC."+DATE+".grib"
+OUTPUT_FILE="EC."+TYPE+"."+DATE+".grib" 
+OUTPUT_FILE_SFC="EC."+TYPE+".SFC."+DATE+".grib"
 print(DATE)
-if TYPE=="forecast":
+if TYPE=="FC":
     server.execute(
         {
         "class": "od",
@@ -58,7 +58,7 @@ if TYPE=="forecast":
     
     #option                 "grid":GRID_ECMWF, necessaire pour avoir une grille reguliere
 
-if TYPE=="analysis":
+if TYPE=="AN":
     server.execute(
         {
         "class": "od",
@@ -94,7 +94,7 @@ if TYPE=="analysis":
             TARGET_DIRECTORY+OUTPUT_FILE_SFC)
         
     
-if TYPE=="ensemble": #ensemble analysis
+if TYPE=="EN": #ensemble analysis
         HOURS_ECMWF=""
         if int(END_TIME) > 18 :
             print("Warning : please specify an other date for hours > 18 hours")
@@ -140,20 +140,23 @@ if TYPE=="ensemble": #ensemble analysis
             },
         TARGET_DIRECTORY+OUTPUT_FILE_SFC)
 
+
     
 if GET_SURFACE:
    os.system("grib_copy " + TARGET_DIRECTORY+OUTPUT_FILE_SFC +" " + TARGET_DIRECTORY+OUTPUT_FILE + " " + TARGET_DIRECTORY+OUTPUT_FILE+"_tempo")
-   os.system("rename.ul " + "grib_tempo" + " grib" + TARGET_DIRECTORY+OUTPUT_FILE+"_tempo") #etape may be unusefull but to be sure file is not corrupted
+   os.system("rename " + "grib_tempo" + " grib" + TARGET_DIRECTORY+OUTPUT_FILE+"_tempo") #etape may be unusefull but to be sure file is not corrupted
 
 
-if TYPE=="ensemble":
-    os.system('grib_copy '+ TARGET_DIRECTORY+OUTPUT_FILE+"_tempo" +" " + TARGET_DIRECTORY+ "ecmwf."+TYPE+".[dataDate].[dataTime]h.member.[perturbationNumber].offset.[offsetToEndOf4DvarWindow].grib")
-if TYPE=="analysis":
-    os.system('grib_copy '+ TARGET_DIRECTORY+OUTPUT_FILE+"_tempo" +" " + TARGET_DIRECTORY+ "ecmwf."+TYPE+".[dataDate].[dataTime].grib")
+if TYPE=="EN":
+    os.system('grib_copy '+ TARGET_DIRECTORY+OUTPUT_FILE+"_tempo" +" " + TARGET_DIRECTORY+ "EC."+TYPE+".[dataDate].[dataTime]h.member.[perturbationNumber].offset.[offsetToEndOf4DvarWindow].grib")
+if TYPE=="AN":
+    os.system('grib_copy '+ TARGET_DIRECTORY+OUTPUT_FILE+"_tempo" +" " + TARGET_DIRECTORY+ "EC."+TYPE+".[dataDate].[dataTime].grib")
     if GET_SURFACE:
-        os.system("grib_copy " + TARGET_DIRECTORY+OUTPUT_FILE_SFC +" " + TARGET_DIRECTORY+ "ecmwf."+TYPE+".SFC."+"[dataDate].[dataTime].grib")
-if TYPE=="forecast":
-    os.system('grib_copy '+ TARGET_DIRECTORY+OUTPUT_FILE+"_tempo" +" " + TARGET_DIRECTORY+ "ecmwf."+TYPE+".[dataDate].[stepRange].grib")
+        os.system("grib_copy " + TARGET_DIRECTORY+OUTPUT_FILE_SFC +" " + TARGET_DIRECTORY+ "EC."+TYPE+".SFC."+"[dataDate].[dataTime].grib")
+if TYPE=="FC":
+    os.system('grib_copy '+ TARGET_DIRECTORY+OUTPUT_FILE+"_tempo" +" " + TARGET_DIRECTORY+ "EC."+TYPE+".[dataDate].[stepRange].grib")
+    if GET_SURFACE:
+        os.system("grib_copy " + TARGET_DIRECTORY+OUTPUT_FILE_SFC +" " + TARGET_DIRECTORY+ "EC."+TYPE+".SFC."+"[dataDate].[stepRange].grib")
 
 
 
