@@ -44,13 +44,6 @@ def generate_date(date_debut,date_fin):
     
     return list(LISTE_DATES.strftime("%Y%m%d"))
 
-
-
-MAIL = #to be completed 
-
-KEY =  #to be completed
-
-
 openfile = open('PARAMS_EXTRACT.json', 'r')
  
 json_params = json.load(openfile)
@@ -165,7 +158,7 @@ if LAT_MIN=="" or LAT_MAX=="" or LAT_MIN=='' or LAT_MAX=='' :
     print("Warning ! No domain specified, EUROPE set as default")
     AREA_ECMWF="EUROPE"
 
-server = ECMWFService("mars", url="https://api.ecmwf.int/v1",key=KEY,email=MAIL)
+server = ECMWFService("mars", url="https://api.ecmwf.int/v1")
 
 
 if TYPE=="EN":

@@ -1,0 +1,8 @@
+name: env_extract_ecmwf
+channels:
+  - conda-forge
+dependencies:
+  - python=3.11.4
+  - numpy=1.25.0
+  - pandas=2.1.4
+  - ecmwf-api-client=1.6.3

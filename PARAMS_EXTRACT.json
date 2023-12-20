@@ -1,6 +1,6 @@
 {
 
-"TARGET_DIRECTORY":"/cnrm/ville/DATA/FORCING_ECMWF/NO_SAVE/JEAN/",
+"TARGET_DIRECTORY":"/home/piaj/02_models/EXTRACT_ECMWF/",
 
 
 "date_debut" : "20170708",
@@ -9,7 +9,7 @@
 
 
 "START_TIME":"00",
-"END_TIME":"18",
+"END_TIME":"00",
 "STEP":"06",
 "FORECAST_START_TIME":"00",
 
@@ -18,7 +18,7 @@
 "LAT_MAX":"",
 "LON_MIN":"",
 "LON_MAX":"",
-"AREA_ECMWF":"GLOBAL",
+"AREA_ECMWF":"",
 
 "GRID":".1",
 
