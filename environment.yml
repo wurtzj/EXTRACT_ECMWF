@@ -6,3 +6,4 @@ dependencies:
   - numpy=1.25.0
   - pandas=2.1.4
   - ecmwf-api-client=1.6.3
+  - eccodes=2.33.0

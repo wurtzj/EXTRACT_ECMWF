@@ -1,27 +1,26 @@
 {
 
-"TARGET_DIRECTORY":"/home/piaj/02_models/EXTRACT_ECMWF/",
+"target_directory"   : "/home/piaj/02_models/EXTRACT_ECMWF/test3/",
 
+"start_date"         : "20170708",
+"end_date"           : "20170710",
+"list_of_dates"      : ["20220617"],
 
-"date_debut" : "20170708",
-"date_fin" : "20170710",
-"LISTE_DATES": ["20220617"],
+"start_time"         :"00",
+"end_time"           :"00",
+"step"               :"06",
+"forecast_start_time":"00",
 
+"lat_min"            : "",
+"lat_max"            : "",
+"lon_min"            : "",
+"lon_max"            : "",
+"area"               : "",
+"grid"               : ".1",
 
-"START_TIME":"00",
-"END_TIME":"00",
-"STEP":"06",
-"FORECAST_START_TIME":"00",
+"type_data"          : "analysis",
 
-
-"LAT_MIN":"",
-"LAT_MAX":"",
-"LON_MIN":"",
-"LON_MAX":"",
-"AREA_ECMWF":"",
-
-"GRID":".1",
-
-"TYPE":"analysis" 
+"get_surface"        : true,
+"get_sea_state"      : true
 
 }

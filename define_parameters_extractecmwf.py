@@ -6,164 +6,139 @@ Created on Mon Nov 14 15:19:43 2022
 @author: wurtzj
 """
 
-
-from ecmwfapi import ECMWFService
+# ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 import os
 import numpy as np
 import json
+import pandas
+# ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
-
+# -------------------------------------------------------
+#   Define internal functions
+# -------------------------------------------------------
 def str_num(i,num_chiffre=2):
-
     if i<10:
         return (num_chiffre-1)*"0"+str(i)
     elif i<100:
         return (num_chiffre-2)*"0"+str(i)
-
     else :
         return str(i)
     
-import pandas
-import datetime
+def generate_date(start_date,end_date):
+    if start_date==end_date:
+        return [start_date]
+    list_of_dates = pandas.date_range(start_date,end_date,freq='d')
+    return list(list_of_dates.strftime("%Y%m%d"))
 
-def generate_list_date(YEAR_START,MONTH_START,DAY_START, YEAR_END, MONTH_END, DAY_END):
-     sdate = datetime.date(YEAR_START,MONTH_START,DAY_START)   # start date
-     edate = datetime.date(YEAR_END,MONTH_END,DAY_END)+datetime.timedelta(days=1)   # end date
-     liste_of_dates = pandas.date_range(sdate,edate-datetime.timedelta(days=1)).strftime('%Y%m%d').tolist()#,freq='d')
-     return liste_of_dates
+# -------------------------------------------------------
+#   Open, Read and Close json file
+# -------------------------------------------------------
+json_file    = open('PARAMS_EXTRACT.json', 'r')
+json_params = json.load(json_file)
+json_file.close()
 
+# -------------------------------------------------------
+#   Store json params in variables
+# -------------------------------------------------------
 
-#Adding automatic dates
-def generate_date(date_debut,date_fin):
-    
-    if date_debut==date_fin:
+# - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+#   Directory where files will be available. It has to end with a /
+# - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+target_directory=json_params["target_directory"]
 
-        return [date_debut]
+if target_directory[-1] != "/":
+    target_directory = target_directory + "/"
 
-    LISTE_DATES = pandas.date_range(date_debut,date_fin,freq='d')
-    
-    return list(LISTE_DATES.strftime("%Y%m%d"))
-
-openfile = open('PARAMS_EXTRACT.json', 'r')
- 
-json_params = json.load(openfile)
-
-
-openfile.close()
-
-
-#Directory where files will be available
-#It has to end with a /
-TARGET_DIRECTORY=json_params["TARGET_DIRECTORY"]
-
-
-if TARGET_DIRECTORY[-1] != "/":
-    TARGET_DIRECTORY = TARGET_DIRECTORY + "/"
-
-#adding automatic path creation
-import os
+# Adding automatic path creation
 try :
-    os.mkdir(TARGET_DIRECTORY)
-    print("creation of "+ TARGET_DIRECTORY + " exists : OK")
+    os.mkdir(target_directory)
+    print("creation of "+ target_directory + " exists : OK")
 
 except:
-    print(TARGET_DIRECTORY + " exists : OK")
+    print(target_directory + " exists : OK")
 
+# - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+#   List of dates and time to extract
+#   date format YYYYMMDD 
+#   time format HH
+# - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+list_of_dates = json_params["list_of_dates"]
+start_date    = json_params["start_date"]
+end_date      = json_params["end_date"]
 
-#List of dates to extract
-#Format AAAAMMDD
-LISTE_DATES=json_params["LISTE_DATES"]
+# Priority to list of dates
+if list_of_dates == [] : 
+    list_of_dates = generate_date(start_date,end_date)
 
-import pandas
-date_debut=json_params["date_debut"]
-date_fin=json_params["date_fin"]
+start_time = json_params["start_time"]
+end_time   = json_params["end_time"]
+step       = json_params["step"]
 
+forecast_start_time = json_params["forecast_start_time"]
 
+# - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+#   Type of data
+# - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+# analysis
+# forecast
+# ensemble -> ensemble analysis
+type_data =json_params["type_data"]
 
-#priority to liste of dates
-if LISTE_DATES == [] : 
-    LISTE_DATES=generate_date(date_debut,date_fin)
+if type_data=="forecast":
+    type_data="FC"
+if type_data=="analysis":
+    type_data="AN"
+if type_data=="ensemble":
+    type_data="EN"
 
+if type_data=="FC" and end_time=="00" and start_time=="00":
+    end_time="24"
+    print("end_time=start_time=00 , as type_data = FC setting end_time to 24")
 
+if type_data=="AN" and end_time=="00" and start_time=="00":
+    end_time="18"
+    print("end_time=start_time=00 , as type_data = AN setting end_time to 18")
 
+hours=start_time+"/to/"+end_time+"/by/"+step
 
-#type of data
-#analysis
-#forecast
-#ensemble -> ensemble analysis
-TYPE =json_params["TYPE"]
-
-if TYPE=="forecast":
-    TYPE="FC"
-if TYPE=="analysis":
-    TYPE="AN"
-if TYPE=="ensemble":
-    TYPE="EN"
-
-
-
-#start time
-START_TIME=json_params["START_TIME"]
-#end time
-END_TIME=json_params["END_TIME"]
-#output frequency
-STEP=json_params["STEP"]
-
-FORECAST_START_TIME = json_params["FORECAST_START_TIME"]
-
-
-
-
-
-if TYPE=="FC" and END_TIME=="00" and START_TIME=="00":
-	END_TIME="24"
-	print("END_TIME=START_TIME=00 , as type = FC setting END_TIME to 24")
-
-if TYPE=="AN" and END_TIME=="00" and START_TIME=="00":
-	END_TIME="18"
-	print("END_TIME=START_TIME=00 , as type = AN setting END_TIME to 18")
-
-HOURS_ECMWF=START_TIME+"/to/"+END_TIME+"/by/"+STEP
-
-
-#Domain 
-#keep empty to get EUROPE domain
-LAT_MIN=json_params["LAT_MIN"]
-LAT_MAX=json_params["LAT_MAX"]
-LON_MIN=json_params["LON_MIN"]
-LON_MAX=json_params["LON_MAX"]
-AREA_ECMWF=json_params["AREA_ECMWF"]
-
-#GRID
-#enables to get the correct grid for MNH
-GRID=json_params["GRID"]
-GRID_ECMWF=GRID+"/"+GRID
-
-
-
-
-
-#get surface parameters or not
-#Default True
-GET_SURFACE=True
-
-if AREA_ECMWF=="" and LAT_MAX != "":
-    AREA_ECMWF=LAT_MAX+"/"+LON_MIN+"/"+LAT_MIN+"/"+LON_MAX
-
-if AREA_ECMWF=='GLOBAL' and LAT_MAX=="":
-    AREA_ECMWF=""
-
-
-if LAT_MIN=="" or LAT_MAX=="" or LAT_MIN=='' or LAT_MAX=='' :
-    print("Warning ! No domain specified, EUROPE set as default")
-    AREA_ECMWF="EUROPE"
-
-server = ECMWFService("mars", url="https://api.ecmwf.int/v1")
-
-
-if TYPE=="EN":
+if type_data=="EN":
     number_of_members=26
-    MEMBERS="/".join(np.array(range(0,number_of_members)).astype("str"))
+    members="/".join(np.array(range(0,number_of_members)).astype("str"))
+
+# - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+#   Domain extension and grid 
+# - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+
+# Keep empty to get EUROPE domain
+lat_min=json_params["lat_min"]
+lat_max=json_params["lat_max"]
+lon_min=json_params["lon_min"]
+lon_max=json_params["lon_max"]
+area=json_params["area"]
+
+if area=="" and lat_max != "":
+    area=lat_max+"/"+lon_min+"/"+lat_min+"/"+lon_max
+
+if area=='GLOBAL' and lat_max=="":
+    area=""
+
+if lat_min=="" or lat_max=="" or lat_min=='' or lat_max=='' :
+    print("Warning ! No domain specified, EUROPE set as default")
+    area="EUROPE"
+
+# grid, enables to get the correct grid for MNH
+grid = json_params["grid"]
+grid = grid+"/"+grid
+
+# - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+#   Id parameters to be extracted  
+# - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+
+# Get surface parameters or not, default is True
+get_surface = json_params["get_surface"]
+
+# Get sea state parameters or not, default is False
+get_sea_state = json_params["get_sea_state"]
 
 # parameters number necessary to MESO-NH
 
@@ -191,15 +166,13 @@ if TYPE=="EN":
   #152 lnsp : logarithm of surface pressure (analysis only (?))
   #134 surface pressure (forecast -> which cases ?)
 
-if TYPE=="FC":
-    PRESSURE="/134"
-    PARAM_ATM="130/131/132/133" 
-    PARAM_SURF="129/172/139/141/170/183/236/39/40/41/42"+ PRESSURE
+if type=="FC":
+    pressure="/134"
+    param_atm="130/131/132/133" 
+    param_surf="129/172/139/141/170/183/236/39/40/41/42"+ pressure
+    param_sea_stae="229/234/237"
 else:
-    PRESSURE="/152"
-    PARAM_ATM="130/131/132/133" + PRESSURE
-    PARAM_SURF="129/172/139/141/170/183/236/39/40/41/42"
-
-
-
-
+    pressure="/152"
+    param_atm="130/131/132/133" + pressure
+    param_surf="129/172/139/141/170/183/236/39/40/41/42"
+    param_sea_state="229/234/237"
