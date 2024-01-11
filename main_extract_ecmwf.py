@@ -9,7 +9,7 @@ Created on Mon Nov 14 15:05:01 2022
 # ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 import os
 import time
-import define_parameters_extractecmwf
+import define_parameters
 # ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
 nb_max_parallel         = 10
@@ -18,10 +18,10 @@ time_to_wait_in_seconds = 10800
 
 print("LAUNCHED")
 
-for date in define_parameters_extractecmwf.list_of_dates:
+for date in define_parameters.list_of_dates:
     print(date)
     if count_proc < nb_max_parallel:
-        os.system("nohup python3 extractecmwf_run.py " + date +" &")
+        os.system("nohup python extract_ecmwf.py " + date +" &")
         count_proc=count_proc+1
         time.sleep(10)
     else:

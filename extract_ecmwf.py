@@ -8,7 +8,7 @@ Created on Mon Nov 14 15:20:28 2022
 
 # ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 import sys
-from   define_parameters_extractecmwf import *
+from   define_parameters import *
 from   ecmwfapi import ECMWFService
 # ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 

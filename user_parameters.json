@@ -1,10 +1,10 @@
 {
 
-"target_directory"   : "/home/piaj/02_models/EXTRACT_ECMWF/test3/",
+"target_directory"   : "/home/piaj/02_models/EXTRACT_ECMWF/europe/",
 
 "start_date"         : "20170708",
-"end_date"           : "20170710",
-"list_of_dates"      : ["20220617"],
+"end_date"           : "20170708",
+"list_of_dates"      : [""],
 
 "start_time"         :"00",
 "end_time"           :"00",

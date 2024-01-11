@@ -33,7 +33,7 @@ def generate_date(start_date,end_date):
 # -------------------------------------------------------
 #   Open, Read and Close json file
 # -------------------------------------------------------
-json_file    = open('PARAMS_EXTRACT.json', 'r')
+json_file    = open('user_parameters.json', 'r')
 json_params = json.load(json_file)
 json_file.close()
 
