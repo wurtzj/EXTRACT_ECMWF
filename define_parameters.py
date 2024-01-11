@@ -91,14 +91,6 @@ if type_data=="analysis":
 if type_data=="ensemble":
     type_data="EN"
 
-if type_data=="FC" and end_time=="00" and start_time=="00":
-    end_time="24"
-    print("end_time=start_time=00 , as type_data = FC setting end_time to 24")
-
-if type_data=="AN" and end_time=="00" and start_time=="00":
-    end_time="18"
-    print("end_time=start_time=00 , as type_data = AN setting end_time to 18")
-
 hours=start_time+"/to/"+end_time+"/by/"+step
 
 if type_data=="EN":
@@ -110,23 +102,20 @@ if type_data=="EN":
 # - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 
 # Keep empty to get EUROPE domain
-lat_min=json_params["lat_min"]
-lat_max=json_params["lat_max"]
-lon_min=json_params["lon_min"]
-lon_max=json_params["lon_max"]
-area=json_params["area"]
+lat_min = json_params["lat_min"]
+lat_max = json_params["lat_max"]
+lon_min = json_params["lon_min"]
+lon_max = json_params["lon_max"]
+area    = json_params["area"]
 
-if area=="" and lat_max != "":
-    area=lat_max+"/"+lon_min+"/"+lat_min+"/"+lon_max
+if area == "" and lat_min != "" and lat_max != "" and lon_min != "" and lon_max != "":
+    area = lat_max+"/"+lon_min+"/"+lat_min+"/"+lon_max
 
-if area=='GLOBAL' and lat_max=="":
-    area=""
-
-if lat_min=="" or lat_max=="" or lat_min=='' or lat_max=='' :
+if lat_min == "" or lat_max == "" or lat_min == "" or lat_max == "" or area == "":
     print("Warning ! No domain specified, EUROPE set as default")
     area="EUROPE"
 
-# grid, enables to get the correct grid for MNH
+# Grid resolution
 grid = json_params["grid"]
 grid = grid+"/"+grid
 

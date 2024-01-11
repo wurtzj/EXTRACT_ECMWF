@@ -1,10 +1,10 @@
 {
 
-"target_directory"   : "/home/piaj/02_models/EXTRACT_ECMWF/europe/",
+"target_directory"   : "/path/to/output/directory/",
 
 "start_date"         : "20170708",
 "end_date"           : "20170708",
-"list_of_dates"      : [""],
+"list_of_dates"      : [],
 
 "start_time"         :"00",
 "end_time"           :"00",

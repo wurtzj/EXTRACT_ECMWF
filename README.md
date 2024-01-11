@@ -12,4 +12,4 @@ python main_extract_ecmwf.py
 
 To follow your extraction's submission, login to [ECMWF's website](https://apps.ecmwf.int/webmars/joblist/).
 
-More informations about this tool are available in [Meso-NH's website](http://mesonh.aero.obs-mip.fr/mesonh56/MesonhTEAMFAQ/ECMWF/ExtracEcmwf).
+More informations about this tool are available in [Meso-NH's website](http://mesonh2.aero.obs-mip.fr/piaj/extract_ecmwf_data/extract_ecmwf_data.html#operational-data-analysis-forecast-or-ensemble).
