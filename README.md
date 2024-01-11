@@ -3,7 +3,7 @@
 This tool enables to get ECMWF files for Meso-NH using python and ECMWF API.
 Number of requests are limited. You may have to wait some time if number of requests are high.
 
-User's parameters have to be defined in configuration file user_parameters.json.
+User's parameters have to be defined in the configuration file called `user_parameters.json`.
 
 To run script, use 
 ```bash
