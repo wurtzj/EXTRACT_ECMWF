@@ -203,6 +203,14 @@ if type_data=="FC":
     if get_surface:
         os.system("grib_copy " + target_directory+output_file_sfc +" " + target_directory+ "EC."+type_data+".SFC."+"[dataDate].[stepRange].grib")
 
+# -------------------------------------------------------
+#   Remove temporary files if desired
+# -------------------------------------------------------
 
-
-
+if remove_tmp_files:
+    os.system('rm '+target_directory+output_file)
+    os.system('rm '+target_directory+'*_tempo')
+    if get_surface:
+        os.system('rm '+target_directory+'*.SFC.*')
+    if get_sea_state:
+        os.system('rm '+target_directory+'*.SEA_STATE.*')

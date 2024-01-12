@@ -152,5 +152,11 @@ else:
 
 print("Login to https://apps.ecmwf.int/webmars/joblist/ to follow your requests.")
 
+# - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+#  Remove tmp files or not
+# - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+
+remove_tmp_files = json_params["remove_tmp_files"]
+
 print("~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~")
 print("                                                           ")
