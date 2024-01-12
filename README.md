@@ -5,9 +5,14 @@ Number of requests are limited. You may have to wait some time if number of requ
 
 User's parameters have to be defined in the configuration file called `user_parameters.json`.
 
-To run script, use 
+To launched your extraction for number of dates lower than 10, use 
 ```bash
 python main_extract_ecmwf.py
+```
+
+If number of dates is higher than 10, use
+```bash
+nohup python main_extract_ecmwf.py
 ```
 
 To follow your extraction's submission, login to [ECMWF's website](https://apps.ecmwf.int/webmars/joblist/).

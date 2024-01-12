@@ -13,6 +13,9 @@ import json
 import pandas
 # ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
+print('                                                           ')
+print('~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~')
+
 # -------------------------------------------------------
 #   Define internal functions
 # -------------------------------------------------------
@@ -52,10 +55,9 @@ if target_directory[-1] != "/":
 # Adding automatic path creation
 try :
     os.mkdir(target_directory)
-    print("creation of "+ target_directory + " exists : OK")
-
+    print("Creation of output directory "+target_directory)
 except:
-    print(target_directory + " exists : OK")
+    print("Output directory "+target_directory+" exists")
 
 # - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 #   List of dates and time to extract
@@ -73,8 +75,11 @@ if list_of_dates == [] :
 start_time = json_params["start_time"]
 end_time   = json_params["end_time"]
 step       = json_params["step"]
+hours      = start_time+"/to/"+end_time+"/by/"+step
 
 forecast_start_time = json_params["forecast_start_time"]
+
+print("Following dates will be extracted ", list_of_dates, " for hours", hours)
 
 # - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 #   Type of data
@@ -90,8 +95,6 @@ if type_data=="analysis":
     type_data="AN"
 if type_data=="ensemble":
     type_data="EN"
-
-hours=start_time+"/to/"+end_time+"/by/"+step
 
 if type_data=="EN":
     number_of_members=26
@@ -139,3 +142,8 @@ else:
     param_atm="130/131/132/133" + pressure
     param_surf="129/172/139/141/170/183/236/39/40/41/42"
     param_sea_state="229/234/237"
+
+print("Login to https://apps.ecmwf.int/webmars/joblist/ to follow your requests.")
+
+print('~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~')
+print('                                                           ')
