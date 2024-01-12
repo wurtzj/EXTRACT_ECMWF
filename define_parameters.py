@@ -13,8 +13,8 @@ import json
 import pandas
 # ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
-print('                                                           ')
-print('~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~')
+print("                                                           ")
+print("~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~")
 
 # -------------------------------------------------------
 #   Define internal functions
@@ -48,6 +48,13 @@ json_file.close()
 #   Directory where files will be available. It has to end with a /
 # - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 target_directory=json_params["target_directory"]
+
+if target_directory=="":
+    print("Please precise the path for the output in target_directory in   ")
+    print("user_parameters.json")
+    print("~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~")
+    print("                                                           ")
+    quit()
 
 if target_directory[-1] != "/":
     target_directory = target_directory + "/"
@@ -145,5 +152,5 @@ else:
 
 print("Login to https://apps.ecmwf.int/webmars/joblist/ to follow your requests.")
 
-print('~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~')
-print('                                                           ')
+print("~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~")
+print("                                                           ")

@@ -1,6 +1,6 @@
 {
 
-"target_directory"   : "/path/to/output/directory/",
+"target_directory"   : "",
 
 "start_date"         : "20170708",
 "end_date"           : "20170708",
