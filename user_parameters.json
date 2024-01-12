@@ -21,6 +21,6 @@
 "type_data"          : "analysis",
 
 "get_surface"        : true,
-"get_sea_state"      : true
+"get_sea_state"      : false
 
 }

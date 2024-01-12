@@ -129,32 +129,6 @@ get_surface = json_params["get_surface"]
 # Get sea state parameters or not, default is False
 get_sea_state = json_params["get_sea_state"]
 
-# parameters number necessary to MESO-NH
-
-#Surface fields 
-  #129 geopotential
-  #172 land_binary_mask
-  #43 soil type
-  #139 soil temperature level 1
-  #141 lwe_thickness_of_surface_snow_amount
-  #170 Soil temperature level 2
-  #183 Soil temperature level 3
-  #236 Soil temperature level 4
-  #39 Volumetric soil water layer 1
-  #40 Volumetric soil water layer 2
-  #41 Volumetric soil water layer 3
-  #42 Volumetric soil water layer 4
-  
-#3D fields
- #133 q specific humidity
- #130 temperature
- #131 u wind
- #132 v wind
- 
-#Pressure (one of these two is necessary for init)
-  #152 lnsp : logarithm of surface pressure (analysis only (?))
-  #134 surface pressure (forecast -> which cases ?)
-
 if type=="FC":
     pressure="/134"
     param_atm="130/131/132/133" 
