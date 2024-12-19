@@ -16,4 +16,4 @@ nohup python main_extract_ecmwf.py
 
 To follow your extraction's submission, login to [ECMWF's website](https://apps.ecmwf.int/webmars/joblist/).
 
-More informations about this tool are available in [Meso-NH's documentation](https://mesonh-beta-test-guide.readthedocs.io/en/latest/extract_ecmwf_data/extract_ecmwf_data.html#operational-data-analysis-forecast-or-ensemble).
+More informations about this tool are available in [Meso-NH's documentation](https://mesonh-beta-test-guide.readthedocs.io/en/latest/getting_started/extract_ecmwf_data/extract_ecmwf_data.html).
