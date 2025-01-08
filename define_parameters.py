@@ -143,7 +143,7 @@ if type=="FC":
     pressure="/134"
     param_atm="130/131/132/133" 
     param_surf="129/172/139/141/170/183/236/39/40/41/42"+ pressure
-    param_sea_stae="229/234/237"
+    param_sea_state="229/234/237"
 else:
     pressure="/152"
     param_atm="130/131/132/133" + pressure
