@@ -1,0 +1,70 @@
+{
+
+"comments"           : "-----------------------------------------------------------",
+"comments"           : "  target_directory is where your data will be written      ",
+"comments"           : "-----------------------------------------------------------",
+
+"target_directory"   : "/path/to/your/targer/directory/",
+
+"comments"           : "-----------------------------------------------------------",
+"comments"           : "  date to be extracted is take between start_date and      ",
+"comments"           : "  end_date if list_of_dates is empty ([]).                 ",
+"comments"           : "-----------------------------------------------------------",
+
+"start_date"         : "20170708",
+"end_date"           : "20170708",
+"list_of_dates"      : [],
+
+"comments"           : "-----------------------------------------------------------",
+"comments"           : "  start_time, first time to extract within the day         ",
+"comments"           : "  end_time : last time extraction within the day           ",
+"comments"           : "  step: time step extraction within the day,               ",
+"comments"           : "  if end_time=start_time, only start_time will be extracted",
+"comments"           : "  forecast_start_time : in case of forecast : time of      ",
+"comments"           : "  launch (00 or 12 for instance)                           ",
+"comments"           : "-----------------------------------------------------------",
+
+"start_time"         :"00",
+"end_time"           :"00",
+"step"               :"06",
+"forecast_start_time":"00",
+
+
+"comments"           : "-----------------------------------------------------------",
+"comments"           : "  domain extension lat_min, lat_max, lon_min, lon_max or   ",
+"comments"           : "  area. If empty get Europe domain.                        ",
+"comments"           : "  grid resolution .1 by default. Could be coarser          ",
+"comments"           : "-----------------------------------------------------------",
+
+"lat_min"            : "",
+"lat_max"            : "",
+"lon_min"            : "",
+"lon_max"            : "",
+"area"               : "",
+"grid"               : ".1",
+
+"comments"           : "-----------------------------------------------------------",
+"comments"           : "  type_data : type of data to be extracted :               ",
+"comments"           : "  analysis, forecast or ensemble.                          ",
+"comments"           : "-----------------------------------------------------------",
+
+"type_data"          : "analysis",
+
+"comments"           : "-----------------------------------------------------------",
+"comments"           : "  get_surface : get surface parameters or not.             ",
+"comments"           : "  Mandatory for Meso-NH users.                             ",
+"comments"           : "  get_sea_state : get sea state parameters or not.         ",
+"comments"           : "  Used only when sea salt aerosols are activated.          ",
+"comments"           : "-----------------------------------------------------------",
+
+"get_surface"        : true,
+"get_sea_state"      : false,
+
+"comments"           : "-----------------------------------------------------------",
+"comments"           : "  remove_tmp_files : remove temporary files or not.        ",
+"comments"           : "  True by default.                                         ",
+"comments"           : "-----------------------------------------------------------",
+
+"remove_tmp_files"   : true
+
+}
